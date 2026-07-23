@@ -1,8 +1,15 @@
 aid: 6sense-insights
 name: 6Sense Insights
-description: 6Sense Insights is a company surfaced as a portfolio company of battery-ventures and added
-  to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  6Sense Insights, Inc. (6sense) is a San Francisco-based revenue AI platform for B2B
+  account-based marketing and sales. Using its Signalverse intent graph and 6AI predictive
+  models, 6sense identifies in-market accounts, deanonymizes anonymous web traffic, scores
+  leads and accounts, and enriches company and contact data across the buying journey.
+  Backed by Battery Ventures, the company publishes a public API portal at api.6sense.com
+  spanning Company Identification, Company Firmographics, Lead Scoring, and People
+  Enrichment/Search APIs (token-authenticated). This record is the company / VC-portfolio
+  profile for 6sense; the full, fully-enriched API contract set for the same company is
+  maintained under the primary "6sense" provider in the API Evangelist network.
 url: https://raw.githubusercontent.com/api-evangelist/6sense-insights/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,14 +17,89 @@ x-backed-by:
 - battery-ventures
 x-tier: stub
 x-tier-reason: portfolio-lead
+x-primary-provider: 6sense
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
 modified: '2026-07-17'
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/6sense-insights.png
 tags:
 - Company
+- ABM
+- Account-Based Marketing
+- Intent Data
+- B2B
+- Predictive Analytics
+- Revenue
+- Sales Intelligence
+- Marketing Technology
+- AI
+- Data Enrichment
 apis: []
+common:
+- type: TrustCenter
+  url: security/6sense-insights-trust-center.yml
+- type: DomainSecurity
+  url: security/6sense-insights-domain-security.yml
+- url: https://6sense.com
+  name: 6sense Website
+  type: Website
+- url: https://6sense.com/platform
+  name: Revenue AI Platform
+  type: Documentation
+- url: https://api.6sense.com/docs/
+  name: 6sense API Portal
+  type: DeveloperPortal
+- url: https://support.6sense.com/docs/6sense-api-overview
+  name: API Overview
+  type: Documentation
+- url: https://support.6sense.com
+  name: Knowledge Base
+  type: Support
+- url: https://6sense.com/blog
+  name: Blog
+  type: Blog
+- url: https://6sense.com/pricing
+  name: Pricing
+  type: Pricing
+- url: https://github.com/6si
+  name: 6si GitHub Org
+  type: GitHubOrganization
+- url: https://6sense.com/terms-of-use/
+  name: Terms of Use
+  type: TermsOfService
+- url: https://6sense.com/privacy-policy/
+  name: Privacy Policy
+  type: PrivacyPolicy
+- url: https://trust.6sense.com/
+  name: Trust Center
+  type: Trust
+- url: https://trust.6sense.com/
+  name: Compliance (SOC 2, ISO 27001, GDPR)
+  type: Compliance
+- url: https://6sense.com/customers
+  name: Customers
+  type: CaseStudies
+- url: https://www.linkedin.com/company/6sense
+  name: LinkedIn
+  type: LinkedIn
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
