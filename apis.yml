@@ -31,7 +31,7 @@ accessModel:
   method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-08-13'
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/6sense-insights.png
 tags:
 - Company
@@ -51,6 +51,66 @@ common:
   url: security/6sense-insights-trust-center.yml
 - type: DomainSecurity
   url: security/6sense-insights-domain-security.yml
+- type: MCPServer
+  name: 6sense MCP Server (Beta)
+  url: mcp/6sense-insights-mcp.yml
+- type: WellKnown
+  name: Well-Known Discovery Probe
+  url: well-known/6sense-insights-well-known.yml
+- type: LLMsTxt
+  name: llms.txt
+  url: llms/6sense-insights-llms.txt
+- type: Authentication
+  name: Authentication Profile
+  url: authentication/6sense-insights-authentication.yml
+- type: OAuthScopes
+  name: OAuth Scopes
+  url: scopes/6sense-insights-scopes.yml
+- type: RateLimits
+  name: Rate Limits
+  url: rate-limits/6sense-insights-rate-limits.yml
+- type: ErrorCatalog
+  name: Error Catalog
+  url: errors/6sense-insights-problem-types.yml
+- type: Lifecycle
+  name: API Lifecycle
+  url: lifecycle/6sense-insights-lifecycle.yml
+- type: Deprecation
+  name: Versioning and Deprecation Policy
+  url: lifecycle/6sense-insights-lifecycle.yml
+- type: StatusPage
+  name: 6sense Status
+  url: https://status.6sense.com
+- type: ChangeLog
+  name: Product Release Notes
+  url: changelog/6sense-insights-changelog.yml
+- type: Conventions
+  name: API Conventions
+  url: conventions/6sense-insights-conventions.yml
+- type: Conformance
+  name: Standards Conformance
+  url: conformance/6sense-insights-conformance.yml
+- type: Plans
+  name: Plans and Credit Model
+  url: plans/6sense-insights-plans-pricing.yml
+- type: Packages
+  name: Client Libraries
+  url: packages/6sense-insights-packages.yml
+- type: Components
+  name: WebTag and Chrome Extension
+  url: components/6sense-insights-components.yml
+- url: https://api.6sense.com/docs/
+  name: 6sense API Reference
+  type: APIReference
+- url: https://support.6sense.com/docs/6sense-model-context-protocol-mcp-1
+  name: 6sense MCP Documentation
+  type: Documentation
+- url: https://support.6sense.com/docs/product-release-notes
+  name: Product Release Notes
+  type: ChangeLog
+- url: https://support.6sense.com/llms.txt
+  name: Support llms.txt
+  type: LLMsTxt
 - url: https://6sense.com
   name: 6sense Website
   type: Website
@@ -99,7 +159,19 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 16
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
+  note: >-
+    Confirmed an official REMOTE MCP server at https://api.6sense.com/mcp
+    (Beta, OAuth 2.0 / RFC 9728 protected resource, scope mcp:use, dynamic
+    client registration) by live probe, plus two real /.well-known/ OAuth
+    documents and a provider-published llms.txt on support.6sense.com. No
+    OpenAPI is served on any 6sense host and no A2A agent card exists.
+    apis[] is deliberately left empty: this is the VC-portfolio company record
+    and the REST contract set for the same company lives under the primary
+    "6sense" provider (x-primary-provider). NOTE for the roadmap#58 duplicate
+    triage — 6sense/6sense-insights is a same-domain pair; the MCP, well-known,
+    llms.txt, conventions, changelog and conformance artifacts written here are
+    NOT present on all/6sense/ and should carry over on a merge.
