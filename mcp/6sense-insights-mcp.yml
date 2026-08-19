@@ -1,0 +1,142 @@
+generated: '2026-08-13'
+method: probed
+status: published
+source: >-
+  https://support.6sense.com/docs/6sense-model-context-protocol-mcp-1 and
+  https://support.6sense.com/docs/set-up-the-6sense-mcp-in-claude — plus a live
+  probe of https://api.6sense.com/mcp, which returned HTTP 401 with
+  WWW-Authenticate: Bearer resource_metadata="https://api.6sense.com/.well-known/oauth-protected-resource/mcp".
+description: >-
+  6sense operates an official REMOTE MCP server at https://api.6sense.com/mcp,
+  currently in Beta. It is an RFC 9728 OAuth 2.0 protected resource: an
+  unauthenticated tools/list POST returns 401 and the WWW-Authenticate challenge
+  points at the protected-resource metadata, whose authorization server
+  advertises the single scope `mcp:use` and supports dynamic client
+  registration (RFC 7591), so MCP clients that implement DCR can connect without
+  pre-provisioned credentials. The provider documents setup for Claude, ChatGPT
+  and Microsoft Copilot Studio. The server is read-only in this release —
+  6sense states it "does not execute actions or modify data" — and exposes the
+  same data and capabilities as Revvy AI. Company and contact enrichment (the
+  REST Enrichment APIs) are explicitly NOT available through MCP in this release.
+
+deployment:
+  mode: remote
+  endpoint: https://api.6sense.com/mcp
+  auth: oauth
+  verified: probed
+  note: >-
+    No local stdio package is published by 6sense. Third-party npm packages
+    named `6sense-mcp` and `adoptai-sixsense-mcp` exist on npm but are NOT
+    first-party (published by adopt.ai and an unattributed author); they are
+    recorded in packages/ as unofficial and are not treated as a 6sense
+    deployment mode.
+
+server:
+  name: 6sense MCP
+  transport: http
+  url: https://api.6sense.com/mcp
+  auth: oauth2
+  release_stage: beta
+  read_only: true
+  protected_resource: well-known/6sense-insights-oauth-protected-resource-mcp.json
+  authorization_server_metadata: well-known/6sense-insights-oauth-authorization-server.json
+  authorization_server: https://auth.6sense.com/v1/apps/agentic/P32lusHUPY06hG8MJtqJnKEmq7hJ/MS3CTIZ4l7VZ4pFeraAIy18Y6wIVN
+  scopes: [mcp:use]
+  dynamic_client_registration: true
+  resource_documentation: https://api.6sense.com/docs
+
+x-evidence:
+  fetched: '2026-08-13'
+  probe:
+    method: POST
+    url: https://api.6sense.com/mcp
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    www_authenticate: >-
+      Bearer resource_metadata="https://api.6sense.com/.well-known/oauth-protected-resource/mcp"
+    body_excerpt: >-
+      Your API token is invalid or auth token is invalid or missing
+      authorization header.
+  negative_controls:
+    - url: https://mcp.6sense.com/mcp
+      http_status: 404
+    - url: https://api.6sense.com/v1/mcp
+      http_status: 404
+    - url: https://agentic.6sense.com/mcp
+      http_status: 404
+    - url: https://api.6sense.com/sse
+      http_status: 404
+
+tools:
+  status: not-enumerated
+  note: >-
+    The live tool list is auth-gated behind per-user OAuth — every 6sense user
+    must authorize individually and access is scoped to their 6sense instance —
+    so tools/list could not be enumerated anonymously and NO tool names are
+    recorded here. 6sense does not publish a tool reference. The capability
+    table below is the provider's own published description of what the server
+    can do; it is NOT a tool list and must not be read as inputSchema evidence.
+    Enumerating the real tools requires an authenticated introspection with a
+    6sense Revenue Marketing account.
+
+documented_capabilities:
+  - capability: Account insights
+    category: reporting
+    description: >-
+      Account activity, engagement and buying signals for a named account.
+  - capability: 6QA trend analysis
+    category: reporting
+    description: >-
+      6QA volume over time, accounts that became 6QA without follow-up,
+      period-over-period comparison.
+  - capability: Keyword performance
+    category: reporting
+    description: Top-performing keywords, intent trends and intent gaps.
+  - capability: Ad campaign performance
+    category: reporting
+    description: >-
+      Impressions, engagement and performance broken out by predictive buying
+      stage.
+  - capability: Website activity
+    category: reporting
+    description: Accounts that visited the site, pages viewed, engagement behavior.
+  - capability: Account filtering and segment discovery
+    category: reporting
+    description: >-
+      Segment membership and filter-based account discovery; results link back
+      into the Segments UI.
+  - capability: Market research
+    category: research
+    description: >-
+      Competitor and positioning analysis, industry trends, personas, GTM and
+      campaign recommendations, market/company news summaries.
+  - capability: Product support
+    category: support
+    description: How-to, troubleshooting and product questions about 6sense itself.
+
+not_included:
+  - Company and contact enrichment are not available through MCP in this release.
+  - No write/action tools — retrieval only.
+  - Data outside Revvy-powered scenarios is not reachable.
+
+access:
+  requirement: >-
+    A 6sense user account with access to the Revenue Marketing platform.
+    Sales-Intelligence-only customers can test connectivity during the beta but
+    with limited data availability.
+  per_user_authorization: true
+  multi_instance: >-
+    Multiple connectors may be created, each authorized against a different
+    6sense instance; connectors are isolated and data is not shared between them.
+
+clients_documented:
+  - name: Claude
+    docs: https://support.6sense.com/docs/set-up-the-6sense-mcp-in-claude
+  - name: ChatGPT
+    docs: https://support.6sense.com/docs/set-up-the-6sense-mcp-in-chatgpt
+  - name: Microsoft Copilot Studio
+    docs: https://support.6sense.com/docs/set-up-the-6sense-mcp-in-ms-copilot
+
+docs:
+  - https://support.6sense.com/docs/6sense-model-context-protocol-mcp-1
+  - https://support.6sense.com/docs/ai-assistant

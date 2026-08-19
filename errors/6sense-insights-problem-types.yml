@@ -1,0 +1,112 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://api.6sense.com/docs/#http-response-codes and
+  https://api.6sense.com/docs/#error-responses
+description: >-
+  6sense's cross-cutting error catalog, captured verbatim from the published API
+  reference. The error envelope is a bespoke two-field JSON object
+  {"status": "error", "message": "..."} — NOT RFC 9457 application/problem+json,
+  and there is no machine-readable error code in the body, so a client can only
+  branch on the HTTP status and on human-readable message text. The one
+  distinctive status is 402 Quota Exhausted, which separates "you ran out of
+  purchased credits" from "you are calling too fast" (429).
+format: custom-json
+rfc9457: false
+content_type: application/json
+envelope:
+  status: >-
+    Always the literal string "error" on a failure.
+  message: >-
+    Human-readable description. Optional per the docs ("a type and optional
+    message").
+  example_required_field: >-
+    {"status": "error", "message": "Email ID is mandatory and can't be blank"}
+  example_no_data: >-
+    {"status": "error", "message": "No data found. Please contact 6sense
+    support, if you think this is an unexpected error."}
+problem_types:
+  - status: 400
+    title: Bad request
+    description: >-
+      Required fields cannot be blank. Do not repeat the request without first
+      modifying it; check the request for errors, fix them and then retry.
+    retryable: false
+    remediation: Correct the request payload before retrying.
+  - status: 401
+    title: Unauthorized
+    description: >-
+      Your API token is invalid or auth token is invalid or missing
+      authorization header.
+    retryable: false
+    remediation: >-
+      Send `Authorization: Token <api_token>`. On the MCP endpoint, complete the
+      OAuth authorization flow — the 401 also carries a WWW-Authenticate Bearer
+      challenge naming the protected-resource metadata.
+    detail: authentication/6sense-insights-authentication.yml
+  - status: 402
+    title: Quota Exhausted
+    description: >-
+      Your allocated Quota is exhausted, please upgrade/top-up your API limit by
+      reaching out to your CSM.
+    retryable: false
+    remediation: >-
+      Purchase or reallocate credits. For Enrichment APIs, allocate 6sense
+      Credits to the API (Enrichment) pool under Settings > Credits.
+    detail: plans/6sense-insights-plans-pricing.yml
+  - status: 403
+    title: Forbidden
+    description: >-
+      You do not have the appropriate user rights to access the request. Do not
+      repeat the request.
+    retryable: false
+    remediation: >-
+      The token's API group or the account's package does not cover this API;
+      contact the CSM to enable access.
+  - status: 404
+    title: Not found
+    description: The resource does not exist.
+    retryable: false
+  - status: 422
+    title: Validation error
+    description: A validation error occurred.
+    retryable: false
+  - status: 429
+    title: Too Many Requests
+    description: >-
+      You have sent too many requests in a given amount of time ("rate limit").
+      Please try again later.
+    retryable: true
+    remediation: >-
+      Back off and retry. No Retry-After header is published, so a client must
+      choose its own backoff. Limit is 100 requests/minute.
+    detail: rate-limits/6sense-insights-rate-limits.yml
+  - status: 50X
+    title: Internal Server Error
+    description: >-
+      Something went wrong with the 6sense API. These errors are logged on our
+      side. You can contact our team to resolve the issue.
+    retryable: true
+success_codes:
+  - status: 200
+    title: OK
+    description: >-
+      Successfully returned response. The response message varies, depending on
+      the request method/endpoint and the requested data.
+  - status: 201
+    title: Created
+    description: >-
+      The request has been fulfilled and has resulted in one or more new
+      resources being created.
+  - status: 204
+    title: No content
+    description: >-
+      The server has successfully fulfilled the request and there is no
+      additional content to send in the response payload body.
+gaps:
+  - No stable machine-readable error code field; only HTTP status plus prose.
+  - No application/problem+json media type; no RFC 9457 type/title/detail/instance.
+  - No error-code reference page enumerating message strings per endpoint.
+  - >-
+    "No data found" is returned as an error envelope rather than an empty
+    successful result, which conflates a miss with a failure.

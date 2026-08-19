@@ -1,0 +1,54 @@
+generated: '2026-08-13'
+method: searched
+source: https://api.6sense.com/docs/#api-rate-limit
+description: >-
+  6sense publishes a single flat rate limit that applies across its REST APIs,
+  stated in prose on the API reference. It publishes NO rate-limit response
+  headers — there is no X-RateLimit-*, RateLimit-* or Retry-After documented
+  anywhere, so an agent cannot read remaining budget or a reset time from a
+  response and can only detect exhaustion after the fact from a 429. That is
+  the operationally significant finding here, not the number.
+docs: https://api.6sense.com/docs/#api-rate-limit
+limits:
+  - scope: per-app-or-user
+    window: 1 minute
+    limit: 100
+    unit: requests
+    burst: null
+    applies_to: All 6sense REST API requests
+    adjustable: true
+    adjustment_process: >-
+      "In case you want to get this limit increased, please reach out to your
+      CSM." 6sense also states the limit is monitored for adjustment.
+    evidence: >-
+      "For our APIs we enforce a rate limit of 100 requests per minute interval,
+      which is monitored for adjustment, if required, to ensure valid API
+      requests are fulfilled successfully."
+limit_count: 1
+exhaustion:
+  status: 429
+  title: Too Many Requests
+  message: >-
+    You have sent too many requests in a given amount of time ("rate limit").
+    Please try again later.
+  retry_after_header: false
+response_headers:
+  published: false
+  headers: []
+  note: >-
+    No rate-limit response headers are documented on https://api.6sense.com/docs/
+    and none could be observed, because every endpoint requires a customer API
+    token. Recorded as an honest absence.
+throttling_note: >-
+  6sense states that exceeding the limit — or exceeding CPU or total time limits
+  — may cause the app or user to be throttled, and that requests made by a
+  throttled user or app will fail.
+quota:
+  model: credits
+  note: >-
+    Separate from rate limiting, 6sense meters usage in credits (Company
+    Identification API Credits, and 6sense Credits for the Enrichment APIs).
+    Quota exhaustion is a distinct 402 response, not a 429. Credits are consumed
+    only for successfully enriched records; unmatched records do not consume
+    credits.
+  detail: plans/6sense-insights-plans-pricing.yml

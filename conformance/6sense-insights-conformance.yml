@@ -1,0 +1,122 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  Live probes of https://api.6sense.com/.well-known/oauth-authorization-server,
+  https://api.6sense.com/.well-known/oauth-protected-resource/mcp and
+  https://api.6sense.com/mcp; plus the published reference at
+  https://api.6sense.com/docs/ and the trust center at https://trust.6sense.com/.
+description: >-
+  Which cross-cutting industry standards 6sense actually conforms to, each with
+  the evidence that established it. The pattern is lopsided: the NEW agent
+  surface (MCP + OAuth) is standards-conformant to a genuinely modern level —
+  RFC 8414, RFC 9728, RFC 7591 dynamic client registration, PKCE S256, DPoP
+  algorithms advertised — while the OLDER REST surface conforms to almost
+  nothing: bespoke auth scheme, bespoke error envelope, no OpenAPI, no
+  pagination contract, no RFC 8594 deprecation signaling.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      https://api.6sense.com/mcp is an OAuth 2.0 protected resource. The
+      authorization server publishes authorization/token/revocation/userinfo
+      endpoints and supports authorization_code, refresh_token,
+      client_credentials, CIBA, jwt-bearer and token-exchange grants.
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: true
+    evidence: >-
+      /.well-known/oauth-authorization-server returns HTTP 200 with a complete
+      metadata document on both api.6sense.com and auth.6sense.com.
+  - id: rfc9728-oauth-protected-resource-metadata
+    conforms: true
+    evidence: >-
+      An unauthenticated POST to /mcp returns 401 with
+      WWW-Authenticate: Bearer resource_metadata="https://api.6sense.com/.well-known/oauth-protected-resource/mcp",
+      and that document returns 200 naming resource, authorization_servers,
+      bearer_methods_supported and scopes_supported.
+  - id: rfc7591-dynamic-client-registration
+    conforms: true
+    evidence: >-
+      registration_endpoint is advertised
+      (https://auth.6sense.com/v1/mgmt/mcp/client/.../register) and the 6sense
+      docs tell customers to use DCR where their AI assistant supports it.
+  - id: rfc7636-pkce
+    conforms: true
+    evidence: code_challenge_methods_supported ["S256"].
+  - id: rfc9449-dpop
+    conforms: partial
+    evidence: >-
+      dpop_signing_alg_values_supported advertises RS/PS/ES/EdDSA families, so
+      DPoP is supported by the authorization server, but 6sense does not
+      document DPoP use for the MCP resource and
+      bearer_methods_supported is ["header"] only.
+  - id: mcp
+    conforms: true
+    evidence: >-
+      Official remote MCP server documented by the provider with setup guides
+      for Claude, ChatGPT and Microsoft Copilot Studio; endpoint answers the MCP
+      OAuth challenge correctly. Beta, read-only.
+    detail: mcp/6sense-insights-mcp.yml
+  - id: oidc
+    conforms: false
+    evidence: >-
+      /.well-known/openid-configuration returns 404 on both api.6sense.com and
+      auth.6sense.com. The authorization server advertises
+      id_token_signing_alg_values_supported, a userinfo_endpoint and OIDC-style
+      claims_supported, but publishes no OIDC discovery document and no `openid`
+      scope, so it is an OAuth 2.0 AS with OIDC-shaped parts rather than a
+      conformant OpenID Provider.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      No OpenAPI or Swagger document is served. Probed
+      /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs
+      and /redoc on api.6sense.com — all 404. The reference at
+      https://api.6sense.com/docs/ is a static Slate HTML page.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors are {"status":"error","message":"..."} as application/json; no
+      application/problem+json and no type/title/detail/instance members.
+    detail: errors/6sense-insights-problem-types.yml
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: >-
+      A deprecation policy is stated in prose but no Sunset or Deprecation
+      response headers are documented.
+    detail: lifecycle/6sense-insights-lifecycle.yml
+  - id: idempotency
+    conforms: false
+    evidence: No Idempotency-Key header or replay semantics documented.
+  - id: pagination
+    conforms: false
+    evidence: No pagination parameters or envelope documented on any endpoint.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: >-
+      /.well-known/security.txt returns 404 on api.6sense.com,
+      support.6sense.com and developers.6sense.com; 6sense.com is behind a
+      Cloudflare 403 challenge and could not be established either way.
+  - id: json-api
+    conforms: false
+    evidence: Responses are plain JSON objects; no JSON:API document structure.
+  - id: graphql
+    conforms: false
+    evidence: No /graphql surface documented or discoverable.
+compliance_programs:
+  - id: soc2
+    conforms: true
+    evidence: Named on the 6sense Trust Center, https://trust.6sense.com/
+  - id: iso27001
+    conforms: true
+    evidence: Named on the 6sense Trust Center, https://trust.6sense.com/
+  - id: gdpr
+    conforms: true
+    evidence: >-
+      Named on the 6sense Trust Center; 6sense additionally publishes WebTag
+      consent guidance instructing customers to obtain opt-in/opt-out before
+      collecting visitor data.
+compliance_detail: security/6sense-insights-trust-center.yml
+summary:
+  conformant: 6
+  partial: 1
+  non_conformant: 9

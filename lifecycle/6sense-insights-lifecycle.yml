@@ -1,0 +1,93 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://api.6sense.com/docs/#versioning, https://status.6sense.com
+  (Statuspage summary.json fetched live), and
+  https://support.6sense.com/docs/product-release-notes
+description: >-
+  6sense versions each API independently in the URL path (v1/v2/v3) and
+  publishes a per-API "current stable version" table. It states that older
+  versions will be deprecated and that customers "may receive timely
+  notifications to upgrade", but it publishes no dated sunset schedule and no
+  RFC 8594 Sunset/Deprecation response headers, so a deprecation is only visible
+  to a human reading a notification — not to a client reading a response.
+versioning:
+  scheme: path
+  mechanism: Major version segment in the request path (/v1/, /v2/, /v3/)
+  docs: https://api.6sense.com/docs/#versioning
+  per_api_versions:
+    - api: Company Identification API
+      current_stable: v3
+    - api: Lead Scoring API
+      current_stable: v2
+    - api: Company Firmographics API
+      previously_known_as: Lead Enrichment API
+      current_stable: v3
+    - api: Lead Scoring and Firmographics API
+      previously_known_as: Lead Enrichment and Scoring API
+      current_stable: v2
+    - api: People Enrichment API
+      current_stable: v2
+    - api: People Search API
+      current_stable: v2
+  notes: >-
+    The reference documents v2 alongside v3 for the Firmographics surface, so
+    older majors remain callable while marked non-current.
+deprecation:
+  policy_published: true
+  policy_url: https://api.6sense.com/docs/#versioning
+  statement: >-
+    "Each API will show the list of versions supported. You may receive timely
+    notifications to upgrade the APIs to the latest stable version as we will
+    deprecate the older versions which are no longer recommended to use."
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  notice_period: null
+  notes: >-
+    No numeric notice window and no dated end-of-life calendar is published.
+    Product renames are handled by carrying the old name forward in the docs
+    ("previously known as the Lead Enrichment API") rather than by retiring a
+    path.
+status_page:
+  url: https://status.6sense.com
+  provider: Atlassian Statuspage
+  api: https://status.6sense.com/api/v2/summary.json
+  per_api_components: true
+  components_observed:
+    - Company Identification API
+    - Company Firmographics API
+    - Lead Scoring API
+    - Lead Scoring and Firmographics API
+    - People Enrichment API
+    - People Search API
+    - Sales Intelligence
+    - Segments
+    - Workflows and Orchestrations
+    - Alerts
+    - Advertising
+    - Reports
+    - Account Based Marketing
+    - Revcity
+    - Conversational Email
+  note: >-
+    Each of the six public REST APIs has its own Statuspage component, which is
+    better granularity than most providers publish — an incident can be scoped
+    to a single API rather than the whole platform.
+changelog:
+  url: https://support.6sense.com/docs/product-release-notes
+  detail: changelog/6sense-insights-changelog.yml
+sla:
+  url: null
+  public_uptime_target: null
+  notes: >-
+    No public numeric uptime SLA. Availability commitments and rate-limit
+    increases are both routed through the Customer Success Manager.
+beta_surfaces:
+  - name: 6sense MCP
+    stage: beta
+    terms: https://support.6sense.com/docs/beta-services-terms-during-the-beta-period
+    detail: mcp/6sense-insights-mcp.yml
+support:
+  knowledge_base: https://support.6sense.com
+  api_reference: https://api.6sense.com/docs/

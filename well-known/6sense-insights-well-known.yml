@@ -1,0 +1,122 @@
+generated: '2026-08-13'
+method: probed
+description: >-
+  Results of probing the /.well-known/ discovery surface for every 6sense host
+  named in apis.yml and in the published API reference (api.6sense.com,
+  support.6sense.com, 6sense.com, auth.6sense.com, plus the negative controls
+  developers.6sense.com and docs.6sense.com). Status is the HTTP code observed
+  at fetch time. api.6sense.com serves TWO real OAuth discovery documents —
+  RFC 8414 authorization-server metadata and the RFC 9728 protected-resource
+  metadata for the 6sense MCP server — and both are saved verbatim. Everything
+  else 404s. 6sense.com itself sits behind a Cloudflare interstitial that
+  answers 403 "Just a moment..." to automated clients on every path, so no
+  conclusion is drawn about that host; support.6sense.com answers 404 with a
+  262KB Document360 HTML shell, which is not a document.
+hosts:
+  - host: https://api.6sense.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        type: application/json
+        file: 6sense-insights-oauth-authorization-server.json
+        note: >-
+          RFC 8414 metadata for the 6sense "agentic" authorization server.
+          Advertises scopes_supported [mcp:use], a dynamic client registration
+          endpoint, PKCE S256, DPoP signing algorithms, and CIBA/token-exchange
+          grants.
+      - path: /.well-known/oauth-protected-resource/mcp
+        status: 200
+        type: application/json
+        file: 6sense-insights-oauth-protected-resource-mcp.json
+        note: >-
+          RFC 9728 protected-resource metadata, discovered from the
+          WWW-Authenticate challenge returned by POST https://api.6sense.com/mcp.
+          Names resource https://api.6sense.com/mcp and scope mcp:use.
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /llms.txt
+        status: 404
+  - host: https://auth.6sense.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        type: application/json
+        note: >-
+          Same authorization-server document as api.6sense.com; not saved twice.
+      - path: /.well-known/openid-configuration
+        status: 404
+        note: >-
+          The AS advertises id_token_signing_alg_values_supported and a
+          userinfo_endpoint but publishes no OIDC discovery document.
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://support.6sense.com
+    documents:
+      - path: /llms.txt
+        status: 200
+        type: text/plain
+        file: ../llms/6sense-insights-llms.txt
+        note: 912-line provider-published documentation index (119KB).
+      - path: /.well-known/security.txt
+        status: 404
+        note: HTML shell (Document360 404 page), not a document.
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://6sense.com
+    note: >-
+      Cloudflare bot interstitial. Every path returns HTTP 403 with a
+      "Just a moment..." challenge page for both a bot user agent and a
+      browser user agent, so presence or absence cannot be established here.
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403
+      - path: /.well-known/agent-card.json
+        status: 403
+      - path: /.well-known/agent.json
+        status: 403
+      - path: /llms.txt
+        status: 403
+  - host: https://developers.6sense.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /llms.txt
+        status: 404
+  - host: https://docs.6sense.com
+    note: Does not resolve (no DNS / connection failure, curl exit 6).
+summary:
+  hosts_probed: 6
+  documents_found: 3
+  security_txt: false
+  openid_configuration: false
+  oauth_authorization_server: true
+  oauth_protected_resource: true
+  agent_card: false

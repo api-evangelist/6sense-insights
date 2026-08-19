@@ -1,0 +1,94 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  registry.npmjs.org (search + package metadata), pypi.org/pypi/<pkg>/json,
+  rubygems.org/api/v1/search.json, api.github.com/orgs/6si/repos, and the
+  published API reference at https://api.6sense.com/docs/.
+description: >-
+  6sense publishes NO first-party client libraries. This is a searched zero, not
+  an unchecked one: npm, PyPI, RubyGems and the company's own GitHub
+  organization (github.com/6si, 58 repos) were all enumerated and none contains
+  a 6sense API SDK. The 6si org is almost entirely forks of infrastructure
+  open source (Milvus, FAISS, Hive, Spark, TiKV, Hadoop) that 6sense runs
+  internally — real engineering, but not a developer-facing distribution. The
+  API reference ships copy-paste cURL, XHR, PHP, Python-requests and Postman
+  snippets in place of an SDK. Two npm packages named for 6sense MCP exist and
+  are recorded below explicitly as UNOFFICIAL so a later pass does not mistake
+  them for first-party.
+official_package_count: 0
+packages: []
+unofficial_packages:
+  - language: javascript
+    registry: npm
+    name: adoptai-sixsense-mcp
+    url: https://www.npmjs.com/package/adoptai-sixsense-mcp
+    source: https://github.com/adoptai/mcp-generator
+    version: 0.2.21
+    published: '2026-04-27'
+    official: false
+    publisher: hmshuv-adopt
+    note: >-
+      Published by adopt.ai from a generic MCP generator, not by 6sense.
+      Predates 6sense's own MCP server (announced 2026-07-15), so it wraps the
+      REST API rather than https://api.6sense.com/mcp.
+  - language: javascript
+    registry: npm
+    name: 6sense-mcp
+    url: https://www.npmjs.com/package/6sense-mcp
+    source: null
+    version: 0.1.0
+    published: '2026-04-26'
+    official: false
+    publisher: zleventer
+    note: >-
+      Single 0.1.0 release from an individual maintainer with no repository
+      link. Not affiliated with 6sense.
+  - language: javascript
+    registry: npm
+    name: 6sense
+    url: https://www.npmjs.com/package/6sense
+    version: 1.1.5
+    published: '2018-07-24'
+    official: false
+    note: >-
+      Name collision only — "Counting wifi/bluetooth devices", unrelated to
+      6sense Insights, Inc. Last published 2018.
+distribution_surfaces:
+  - name: 6sense WebTag 2.0
+    kind: cdn-javascript
+    registry: cdn
+    version: null
+    published: null
+    official: true
+    note: >-
+      The customer-facing JavaScript distribution. The tag is generated per
+      tenant inside the 6sense Integration Settings UI and served from a
+      per-tenant URL on j.6sc.co (6sense's own docs site loads
+      https://j.6sc.co/j/84570bb8-885c-42f5-847d-17511fe7c7f4.js). The URL is
+      NOT version-pinned and there is no registry metadata endpoint to query, so
+      no version can be recorded — a consumer cannot tell what build they are
+      running either, which is the finding. 6sense states configuration changes
+      are pushed to already-deployed tags without the site code changing.
+    docs: https://support.6sense.com/docs/set-up-6sense-webtag-20
+    detail: components/6sense-insights-components.yml
+registries_checked:
+  - registry: npm
+    method: https://registry.npmjs.org/-/v1/search?text=6sense
+    first_party_hits: 0
+  - registry: npm-scoped
+    method: 'https://registry.npmjs.org/@6sense/mcp, @6sense/sdk'
+    status: 404
+  - registry: pypi
+    method: 'https://pypi.org/pypi/{6sense,sixsense,six-sense,sixsense-api,py6sense,sixsenseapi}/json'
+    status: 404
+  - registry: rubygems
+    method: https://rubygems.org/api/v1/search.json?query=6sense
+    first_party_hits: 0
+  - registry: github
+    method: https://api.github.com/orgs/6si/repos
+    repos: 58
+    first_party_sdk_hits: 0
+    note: >-
+      Repos are forks of Milvus, knowhere, FAISS, cuVS, TiDB/TiKV/PD, TiFlash,
+      Hive, Spark, Hadoop, Tez, Ranger, Druid, Luigi and Bazel rules, plus
+      6sense-authored infra tools (shipwright, splicer). No API client library.

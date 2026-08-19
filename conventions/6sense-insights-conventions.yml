@@ -1,0 +1,126 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://api.6sense.com/docs/ — the cross-cutting request/response conventions
+  that apply across the 6sense REST APIs, read from the published reference.
+description: >-
+  How the 6sense REST APIs behave across every operation: authentication style,
+  versioning, error envelope, rate-limit signaling, credit metering and partner
+  identification. The notable absences are as informative as the presences —
+  6sense documents NO idempotency mechanism, NO pagination convention on the
+  enrichment endpoints, NO request-id tracing header a client can send, and NO
+  rate-limit response headers. An agent integrating here gets a token, a status
+  code and a prose message, and nothing else to reason with at runtime.
+
+base_urls:
+  - https://api.6sense.com
+  - https://epsilon.6sense.com
+  - https://scribe.6sense.com
+api_style: >-
+  REST over HTTPS. Mixed request encodings — several endpoints take
+  application/x-www-form-urlencoded bodies rather than JSON. JSON responses.
+
+authentication:
+  scheme: 'Authorization: Token <api_token>'
+  note: >-
+    The `Token` scheme, not `Bearer`. Clients and SDK generators that assume
+    Bearer will fail. The MCP server is a separate OAuth 2.0 surface.
+  partner_header: 'X-6s-CustomID: <partner_name>-<customer_name>-<customer_api_token>'
+  detail: authentication/6sense-insights-authentication.yml
+  docs: https://api.6sense.com/docs/#get-your-api-token
+
+idempotency:
+  supported: false
+  mechanism: null
+  note: >-
+    No Idempotency-Key header, no request-deduplication guarantee and no
+    replay semantics are documented. The APIs are predominantly read/enrichment
+    calls, so the practical exposure is duplicate credit consumption on retry
+    rather than duplicate writes — but 6sense states credits are consumed per
+    successfully enriched record, so a blind retry of a partially-succeeded
+    batch is a metered cost with no published protection.
+
+pagination:
+  style: none-documented
+  note: >-
+    The reference documents no cursor, offset or page parameters and no
+    has_more/next envelope field. The People Search API takes filter parameters
+    with per-filter maximums (e.g. "Maximum items 10") rather than a paging
+    contract. Recorded as an honest absence.
+
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+
+request_tracing:
+  client_header: null
+  server_reference: >-
+    401 responses embed an opaque trace reference of the form
+    api.6sense.com/trace/<opaque>/<opaque> in the error message body. It is not
+    a header, is not documented, and appears only on auth failures — usable when
+    reporting an incident to support, not as a general correlation id.
+
+versioning:
+  scheme: path
+  mechanism: /v1/, /v2/, /v3/ segments, versioned independently per API
+  detail: lifecycle/6sense-insights-lifecycle.yml
+  docs: https://api.6sense.com/docs/#versioning
+
+error_envelope:
+  shape: '{"status": "error", "message": "<human readable>"}'
+  rfc9457: false
+  machine_readable_code: false
+  detail: errors/6sense-insights-problem-types.yml
+  docs: https://api.6sense.com/docs/#error-responses
+
+rate_limit_signaling:
+  limit: 100 requests per minute
+  response_headers: []
+  retry_after: false
+  exhaustion_status: 429
+  detail: rate-limits/6sense-insights-rate-limits.yml
+  docs: https://api.6sense.com/docs/#api-rate-limit
+
+quota_and_metering:
+  model: credits
+  types:
+    - name: Company Identification API Credits
+      applies_to: [Company Identification API]
+    - name: 6sense Credits
+      applies_to:
+        - Company Firmographics API
+        - Lead Scoring and Firmographics API
+        - People Enrichment API
+        - People Search API
+      allocation: >-
+        Credits are allocated from the account pool to an "API (Enrichment)"
+        balance under Settings > Credits > Distribute Credits.
+      consumption: >-
+        Only successfully enriched records consume credits. Submitting 100
+        records and matching 80 consumes 80 credits; the 20 misses are free.
+  exhaustion_status: 402
+  detail: plans/6sense-insights-plans-pricing.yml
+
+client_side_vs_server_side:
+  note: >-
+    6sense splits its APIs by intended deployment. The Company Identification
+    API is designed for CLIENT-SIDE use (latency-sensitive visitor
+    de-anonymization, normally delivered through the WebTag) and 6sense
+    explicitly does not recommend server-side implementation of it. The
+    Enrichment APIs are the opposite: server-to-server only, and 6sense
+    instructs that those tokens must never be exposed on a public domain.
+
+token_hygiene_guidance:
+  - One token per integration.
+  - Rotate every 90 days.
+  - Deactivate unused tokens; delete tokens no longer needed.
+  - Token Score and Segments settings are restrictive by default.
+
+gaps:
+  - No idempotency contract.
+  - No documented pagination.
+  - No rate-limit response headers and no Retry-After.
+  - No client-suppliable correlation/request id.
+  - No machine-readable error code.
+  - No published OpenAPI on the API host (probed; see x-coverage in apis.yml).

@@ -1,0 +1,79 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://support.6sense.com/docs/set-up-6sense-webtag-20,
+  https://support.6sense.com/docs/6sense-webtag-20-configurations and
+  https://support.6sense.com/docs/chrome-extension
+description: >-
+  6sense's client-side surface is not an SDK or an element library — it is two
+  installed runtimes: a per-tenant JavaScript WebTag that customers drop on
+  their own site, and a Chrome Extension that overlays 6sense data on CRM and
+  sales tools. Both are configured in the 6sense app rather than in code, which
+  is the defining property here: the WebTag's behavior is changed server-side by
+  editing Integration Settings, with no change to the snippet already deployed
+  on the customer's website.
+components:
+  - family: WebTag
+    name: 6sense WebTag 2.0
+    kind: embedded-javascript-tag
+    official: true
+    loader: >-
+      A per-tenant <script id="6senseWebTag"> block generated in the 6sense app
+      (Integration Settings), copied to clipboard, downloaded as TXT, or emailed
+      to a development team.
+    delivery: cdn
+    host: j.6sc.co
+    version: null
+    version_note: >-
+      The tag URL is not version-pinned and there is no registry or metadata
+      endpoint for it, so no version can be recorded.
+    configuration: >-
+      Configuration lives in the 6sense Integration Settings interface, not in
+      the page code. Saving a configuration change pushes it to tags already
+      deployed on the website or tag manager. Multiple WebTags can be generated,
+      each with its own configuration, for different domains and landing pages.
+    capabilities:
+      - Company Identification API delivery (client-side visitor de-anonymization)
+      - Smart Form Fill
+      - Domain inclusion list
+      - Subdomain coverage automatic when the parent domain is tagged
+      - HTML meta description capture
+    install_paths:
+      - Direct in the site template / CMS
+      - Google Tag Manager (GTM), including a custom data-layer variable guide
+      - Adobe Launch (Data Collection)
+    loads_asynchronously: true
+    latency_note: >-
+      6sense positions the Company Identification API as client-side precisely
+      because latency matters, and explicitly does not recommend a server-side
+      implementation of it.
+    privacy: >-
+      6sense states customers are responsible for the right to send tag data,
+      must maintain a compliant privacy policy, and may use tag features to stop
+      data transmission for visitors who have not opted in or have opted out.
+      Cookie-consent integration is the customer's responsibility.
+    data_delay: Traffic begins flowing into Sales Intelligence within 24 hours of install.
+    docs: https://support.6sense.com/docs/set-up-6sense-webtag-20
+    configuration_docs: https://support.6sense.com/docs/6sense-webtag-20-configurations
+    health_check: https://support.6sense.com/docs/check-6sense-webtag-configuration-health
+  - family: Browser extension
+    name: 6sense Chrome Extension
+    kind: browser-extension
+    official: true
+    audience: Sales Intelligence license holders
+    capabilities:
+      - Account and contact data overlaid on the CRM
+      - RevvyAI for Sales chat interface (shipped 2026-05-12)
+      - AI Writer
+      - AI Insights summaries
+      - Gong integration (shipped 2026-08-12)
+    docs: https://support.6sense.com/docs/chrome-extension
+    setup: https://support.6sense.com/docs/set-up-chrome-extension
+notes:
+  - >-
+    Neither component is distributed through a package registry, so neither
+    appears in packages/ as an installable dependency; the WebTag is recorded
+    there under distribution_surfaces with version null.
+  - >-
+    No embeddable UI element library, hosted checkout-style surface, or embedded
+    dashboard product is published.

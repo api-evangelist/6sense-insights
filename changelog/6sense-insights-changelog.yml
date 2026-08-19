@@ -1,0 +1,72 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://support.6sense.com/docs/product-release-notes and the individual dated
+  release-note pages linked from https://support.6sense.com/llms.txt
+description: >-
+  6sense publishes a dated Product Release Notes series on its knowledge base,
+  roughly every 4-8 weeks, plus a separate Monthly Company Data Refresh series
+  that reports how the underlying account graph changed. The release notes are
+  PRODUCT-scoped, not API-scoped: they announce platform features and only
+  occasionally mention the APIs, and there is no per-version API changelog tied
+  to the v1/v2/v3 path versions. There is no breaking-change section and no
+  machine-readable feed.
+docs: https://support.6sense.com/docs/product-release-notes
+scheme: date-based product release notes (no API version numbers)
+cadence: irregular, roughly every 4-8 weeks
+machine_readable_feed: false
+breaking_change_section: false
+current: '2026-08-12'
+entries:
+  - date: '2026-08-12'
+    url: https://support.6sense.com/docs/2026-08-12-product-release-notes
+    latest: true
+    breaking: []
+    highlights:
+      - Advertising Campaign Details page account-level drill-down across Highlights, Account Journey, Buying Stage Distribution and New 6QAs
+      - Recommended leads for Advertising campaigns (Beta)
+      - JavaScript ad creative support for banner ads
+      - Third-party impression and click tracking (DoubleVerify, IAS, CM360) with vendor-domain validation
+      - Buying Stage Movement and Buying Stage Progressions reports
+      - G2 competitor filters for segments
+      - New push-accounts-to-Salesforce-campaign node in Audience Workflows
+      - Sales Intelligence enhanced CRM matching (Beta); Chrome extension for Gong
+  - date: '2026-07-15'
+    url: https://support.6sense.com/docs/2026-07-15-product-release-notes
+    breaking: []
+    highlights:
+      - MCP server (Beta) shipped under "Platform enablement updates" — the release that introduced https://api.6sense.com/mcp
+      - RevvyAI for Marketing exits Beta to general availability for all Revenue Marketing customers
+      - AI Email now supports the Custom Roles framework (Advanced Security package)
+      - Filter value sets; unsync multiple segment syncs
+  - date: '2026-05-12'
+    url: https://support.6sense.com/docs/2026-05-12-product-release-notes
+    breaking: []
+    highlights:
+      - RevvyAI for Marketing
+      - Advertising cross-campaign pipeline reporting and Campaign Details redesign
+      - Opportunity Trends and Website Visits reports
+      - Microsoft Dynamics CRM support for Intelligent Workflows
+      - RevvyAI for Sales chat interface in the SI Chrome Extension and web app
+  - date: '2026-02-13'
+    url: https://support.6sense.com/docs/2026-02-13-product-release-notes
+    breaking: []
+  - date: '2025-11-11'
+    url: https://support.6sense.com/docs/2025-11-11-product-release-notes
+    breaking: []
+related_series:
+  - name: Monthly Company Data Refresh Release Notes
+    url: https://support.6sense.com/docs/monthly-company-data-refresh-release-notes-1
+    updated: '2026-08-06'
+    description: >-
+      Monthly report on changes to the 6sense Company Accounts graph — accounts
+      created and removed, fields refreshed, and regional coverage. July 2026:
+      ~600K accounts created, ~450K junk/dead-domain accounts removed, ~76.2M
+      total (NA ~37.2M, EMEA ~18.8M, APAC ~16.5M, LATAM ~3.8M), ~930K accounts
+      updated. This is the closest thing 6sense publishes to a data-quality
+      changelog for the enrichment APIs.
+gaps:
+  - No API-specific changelog; version changes to v1/v2/v3 paths are not announced here.
+  - No RSS/Atom/JSON feed for the release notes.
+  - No breaking-change or deprecation-notice section.
+detail: lifecycle/6sense-insights-lifecycle.yml

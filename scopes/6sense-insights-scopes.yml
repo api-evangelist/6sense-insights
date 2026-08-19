@@ -1,0 +1,42 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://api.6sense.com/.well-known/oauth-authorization-server and
+  https://api.6sense.com/.well-known/oauth-protected-resource/mcp (both fetched
+  live, HTTP 200).
+description: >-
+  6sense's OAuth surface publishes exactly one scope. It governs the MCP server
+  at https://api.6sense.com/mcp, not the REST APIs — those authenticate with an
+  `Authorization: Token <api_token>` header and have no OAuth scopes. What the
+  REST APIs scope instead is the API TOKEN itself: tokens are issued per API
+  group and are limited by the credit type the customer purchased, and the
+  Score and Segments settings on a token further restrict what detail it may
+  return. That authorization model is not expressed as OAuth scopes anywhere
+  6sense publishes.
+docs: https://support.6sense.com/docs/6sense-model-context-protocol-mcp-1
+authorization_server: >-
+  https://auth.6sense.com/v1/apps/agentic/P32lusHUPY06hG8MJtqJnKEmq7hJ/MS3CTIZ4l7VZ4pFeraAIy18Y6wIVN
+resource: https://api.6sense.com/mcp
+scopes:
+  - name: mcp:use
+    description: >-
+      Read-only access to 6sense data through the 6sense MCP server, scoped to
+      the 6sense instance and the user account used during authorization.
+    resource: https://api.6sense.com/mcp
+    grants: read
+    evidence: >-
+      scopes_supported ["mcp:use"] in both the RFC 8414 authorization-server
+      metadata and the RFC 9728 protected-resource metadata.
+scope_count: 1
+notes:
+  - >-
+    Authorization is per user — every 6sense user must complete the consent flow
+    individually, and a connector is isolated to the instance authorized during
+    that flow.
+  - >-
+    The scope is coarse: there is no per-capability decomposition, so a client
+    granted mcp:use reaches every documented MCP capability the user's own
+    6sense entitlements allow. Entitlement, not scope, is the real boundary.
+  - >-
+    No token-scope / permission reference page is published for the REST API
+    tokens; the docs describe API groups and credit types in prose only.

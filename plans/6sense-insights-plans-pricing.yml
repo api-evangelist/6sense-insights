@@ -1,0 +1,76 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://api.6sense.com/docs/#types-of-api-credits — the only public 6sense
+  document that states how API access is metered and priced.
+description: >-
+  6sense publishes NO priced API plans. There is no self-serve tier, no free
+  tier, no published per-call rate and no price list; every API is gated behind
+  a platform contract and enabled by a Customer Success Manager. What 6sense
+  does publish is the METERING MODEL — two distinct credit currencies and the
+  rules that govern consumption — which is recorded below because it is the
+  real commercial contract an integrator has to plan against, even though it
+  carries no numbers.
+docs: https://api.6sense.com/docs/#types-of-api-credits
+pricing_page: https://6sense.com/pricing
+plan_count: 0
+free_tier: false
+self_serve: false
+public_prices: false
+currency: null
+note: >-
+  plan_count is 0 because 6sense publishes no named, priced tiers for API
+  access — not because none were looked for. https://6sense.com/pricing sits
+  behind a Cloudflare bot interstitial that answers HTTP 403 to automated
+  clients, so its contents could not be read; the API reference is
+  unambiguous regardless, routing every access and quota question to the CSM
+  ("Contact your Customer Success Manager (CSM) to enable access to eligible
+  APIs", "please upgrade/top-up your API limit by reaching out to your CSM").
+access_gate:
+  model: enterprise-contract
+  enablement: Customer Success Manager enables eligible APIs per account.
+  platform_requirement: >-
+    Company Identification API requires the 6sense Revenue AI / RAIM Platform.
+    Company Firmographics requires the 6sense Platform or a Sales Intelligence
+    package. Lead Scoring and Firmographics requires a Platform or Sales
+    Intelligence package for enrichment plus the Advanced package for scoring.
+    People Enrichment must be purchased as an add-on.
+metering:
+  currencies:
+    - name: Company Identification API Credits
+      applies_to:
+        - Company Identification API
+      rule: 1 matched company = 1 API Credit.
+      notes:
+        - >-
+          Repeated identification of the same IP address counts toward credit
+          deduction according to the customer's contract terms.
+        - This credit model is unchanged from prior versions.
+    - name: 6sense Credits
+      applies_to:
+        - People Enrichment API
+        - Company Firmographics API
+        - Lead Scoring and Firmographics API
+      rule: 1 successfully enriched record = 1 6sense Credit.
+      allocation: >-
+        Credits are drawn from the account credit pool and must be explicitly
+        allocated to an "API (Enrichment)" balance under
+        Settings > Credits > Distribute Credits.
+      notes:
+        - Credits are consumed only for successfully enriched records.
+        - Records that do not return a match do not consume credits.
+        - >-
+          Worked example from the docs — submit 100 records, 80 enrich
+          successfully, 80 credits are consumed and the 20 misses are free.
+  unmetered_apis:
+    - People Search API
+    - Lead Scoring API
+  exhaustion:
+    status: 402
+    message: >-
+      Your allocated Quota is exhausted, please upgrade/top-up your API limit by
+      reaching out to your CSM.
+plans: []
+related:
+  - rate-limits/6sense-insights-rate-limits.yml
+  - conventions/6sense-insights-conventions.yml
