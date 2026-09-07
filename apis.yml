@@ -197,3 +197,5 @@ x-enrichment:
     triage — 6sense/6sense-insights is a same-domain pair; the MCP, well-known,
     llms.txt, conventions, changelog and conformance artifacts written here are
     NOT present on all/6sense/ and should carry over on a merge.
+x-parent: 6sense
+x-relationship: product
